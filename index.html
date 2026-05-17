@@ -32,9 +32,6 @@
         input:focus, textarea:focus { outline: none; border-color: #9bff6e; box-shadow: 0 0 0 3px rgba(155, 255, 110, 0.2); }
         button { background: #1f3320; border: none; padding: 12px 28px; border-radius: 40px; color: #ebffe0; cursor: pointer; border: 1px solid #47633b; display: inline-flex; align-items: center; gap: 12px; font-weight: bold; }
         button:hover { background: #2d4a27; border-color: #9bff6e; transform: translateY(-1px); }
-        .form-status { margin-top: 15px; padding: 12px; border-radius: 12px; text-align: center; }
-        .form-status-success { background: #1a2e1a; color: #b5ff8f; }
-        .form-status-error { background: #2e1a1a; color: #ff9e8f; }
         
         .comments-section h2 { font-size: 1.7rem; margin: 0 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px dashed #2a2f3c; color: #d6f5c0; }
         .comments-list { background: #0b0e14; border-radius: 24px; padding: 1.5rem; border: 1px dashed #2a2f3c; }
@@ -42,8 +39,13 @@
         .comment-author { font-weight: bold; color: #b5ff8f; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .comment-author i { font-size: 0.9rem; color: #6c8f56; }
         .comment-text { color: #e2e8f0; margin-bottom: 8px; line-height: 1.45; }
-        .comment-date { font-size: 0.7rem; color: #6a7388; }
+        .comment-date { font-size: 0.7rem; color: #6a7388; margin-left: auto; }
+        .reply-btn { background: none; border: none; color: #6c8f56; cursor: pointer; font-size: 0.8rem; padding: 0; margin-top: 5px; margin-right: 10px; }
+        .reply-btn:hover { color: #b5ff8f; text-decoration: underline; }
         .replies { margin-left: 30px; margin-top: 10px; padding-left: 15px; border-left: 2px solid #2a2f3c; }
+        .reply-form { display: none; margin-top: 10px; margin-left: 30px; background: #0e1118; padding: 12px; border-radius: 16px; }
+        .reply-form input, .reply-form textarea { width: 100%; background: #03060b; border: 1px solid #2b303d; padding: 8px 12px; border-radius: 12px; color: #f0f3fa; margin-bottom: 8px; font-size: 0.85rem; }
+        .reply-form button { background: #1f3320; border: none; padding: 6px 16px; border-radius: 20px; color: #ebffe0; cursor: pointer; font-size: 0.8rem; }
         
         footer { text-align: center; padding: 1.8rem; border-top: 1px solid #1a1e28; color: #5f6a84; font-size: 0.75rem; }
         @media (max-width: 640px) { .main-content { padding: 1.3rem; } .header { flex-direction: column; text-align: center; } .replies { margin-left: 15px; } }
@@ -62,7 +64,7 @@
             ✅ Размещайте прогнозы и ставки для общего доступа.</p>
         </div>
         
-        <!-- ФОРМА НАВЕРХУ (РАБОТАЕТ ЧЕРЕЗ FORMSPARK) -->
+        <!-- ФОРМА ОТПРАВКИ (РАБОТАЕТ) -->
         <div class="comment-form-area">
             <h3><i class="fas fa-pen-alt"></i> Добавить прогноз или комментарий</h3>
             <form action="https://submit-form.com/9dwfhMonW" method="POST">
@@ -74,7 +76,7 @@
             <p style="font-size: 0.7rem; margin-top: 15px; color: #5a6e4a;"><i class="fas fa-check-circle"></i> Все сообщения приходят администратору. После проверки лучшие появляются на сайте.</p>
         </div>
         
-        <!-- КОММЕНТАРИИ ПОЛЬЗОВАТЕЛЕЙ -->
+        <!-- КОММЕНТАРИИ С ВОЗМОЖНОСТЬЮ ОТВЕТОВ -->
         <div class="comments-section">
             <h2><i class="fas fa-comment-dots"></i> Комментарии и обсуждения</h2>
             <div class="comments-list" id="commentsList">
@@ -86,8 +88,18 @@
 </div>
 
 <script>
+    // ДАННЫЕ КОММЕНТАРИЕВ (добавляйте сюда вручную)
     let commentsData = [
-        // Добавляйте комментарии сюда
+        // Пример:
+        // {
+        //     id: 1,
+        //     author: "Алексей",
+        //     text: "Реал Мадрид — Барселона, победа Реала, кф 2.1",
+        //     date: "17.05.2026",
+        //     replies: [
+        //         { author: "Дмитрий", text: "Хороший прогноз, согласен!", date: "17.05.2026" }
+        //     ]
+        // }
     ];
     
     function renderComments() {
@@ -100,27 +112,34 @@
         let html = '';
         for (let c of commentsData) {
             html += `
-                <div class="comment">
+                <div class="comment" data-comment-id="${c.id}">
                     <div class="comment-author">
                         <i class="fas fa-user-circle"></i> ${escapeHtml(c.author)}
                         <span class="comment-date">${c.date || new Date().toLocaleDateString()}</span>
                     </div>
                     <div class="comment-text">${escapeHtml(c.text)}</div>
-                </div>
+                    <button class="reply-btn" onclick="showReplyForm(${c.id})"><i class="fas fa-reply"></i> Ответить</button>
+                    <div id="reply-form-${c.id}" class="reply-form">
+                        <input type="text" id="reply-name-${c.id}" placeholder="Ваше имя">
+                        <input type="email" id="reply-email-${c.id}" placeholder="Ваш email">
+                        <textarea id="reply-text-${c.id}" rows="2" placeholder="Ваш ответ..."></textarea>
+                        <button onclick="submitReply(${c.id})">Отправить ответ</button>
+                    </div>
             `;
             if (c.replies && c.replies.length) {
                 html += `<div class="replies">`;
                 for (let r of c.replies) {
                     html += `
-                        <div class="comment">
+                        <div class="comment" style="margin-bottom: 12px;">
                             <div class="comment-author"><i class="fas fa-user-circle"></i> ${escapeHtml(r.author)}</div>
                             <div class="comment-text">${escapeHtml(r.text)}</div>
-                            <div class="comment-date">${r.date || new Date().toLocaleDateString()}</div>
+                            <div class="comment-date" style="font-size: 0.7rem;">${r.date || new Date().toLocaleDateString()}</div>
                         </div>
                     `;
                 }
                 html += `</div>`;
             }
+            html += `</div>`;
         }
         container.innerHTML = html;
     }
@@ -133,6 +152,41 @@
             if (m === '>') return '&gt;';
             return m;
         });
+    }
+    
+    function showReplyForm(commentId) {
+        const form = document.getElementById(`reply-form-${commentId}`);
+        form.style.display = form.style.display === 'none' || !form.style.display ? 'block' : 'none';
+    }
+    
+    async function submitReply(commentId) {
+        const name = document.getElementById(`reply-name-${commentId}`).value.trim();
+        const email = document.getElementById(`reply-email-${commentId}`).value.trim();
+        const text = document.getElementById(`reply-text-${commentId}`).value.trim();
+        
+        if (!name || !email || !text) {
+            alert('Заполните все поля для ответа');
+            return;
+        }
+        
+        try {
+            const response = await fetch('https://getform.io/f/bjjyjzxa', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, message: `Ответ на комментарий #${commentId}: ${text}` })
+            });
+            if (response.ok) {
+                alert('Ответ отправлен! После проверки администратор опубликует его.');
+                document.getElementById(`reply-name-${commentId}`).value = '';
+                document.getElementById(`reply-email-${commentId}`).value = '';
+                document.getElementById(`reply-text-${commentId}`).value = '';
+                document.getElementById(`reply-form-${commentId}`).style.display = 'none';
+            } else {
+                alert('Ошибка отправки. Попробуйте позже.');
+            }
+        } catch (err) {
+            alert('Ошибка. Напишите в Telegram.');
+        }
     }
     
     renderComments();
