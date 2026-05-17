@@ -117,7 +117,23 @@
         ]
     }
 ];
-    
+{   // ← запятая выше и новый объект
+        id: 2,
+        author: "Банкир",
+        text: "Взял матч в пещере\nЭкскурсионистас — УАИ Уркиса\nисход - ничья",
+        date: "09.05.2026 00:24",
+        image: "",
+        replies: [
+            { author: "Сергей", text: "что за пещера?", date: "09.05.2026 01:37" },
+            { author: "Дуан", text: "+++", date: "09.05.2026 11:54" },
+            { 
+                author: "Red", 
+                text: '3.3кф от души', 
+                date: "09.05.2026 12:10" 
+            }
+        ]
+    }
+];
     function renderComments() {
     const container = document.getElementById('commentsList');
     if (!commentsData.length) {
