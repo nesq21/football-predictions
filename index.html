@@ -164,22 +164,9 @@
             .main-content { padding: 1.3rem; }
             .header { flex-direction: column; text-align: center; }
         }
-        .success-message {
-            background: #1a2e1a;
-            color: #b5ff8f;
-            padding: 12px;
-            border-radius: 12px;
-            margin-top: 15px;
-            text-align: center;
-        }
-        .error-message {
-            background: #2e1a1a;
-            color: #ff9e8f;
-            padding: 12px;
-            border-radius: 12px;
-            margin-top: 15px;
-            text-align: center;
-        }
+        .form-status { margin-top: 15px; padding: 12px; border-radius: 12px; text-align: center; }
+        .form-status-success { background: #1a2e1a; color: #b5ff8f; }
+        .form-status-error { background: #2e1a1a; color: #ff9e8f; }
     </style>
 </head>
 <body>
@@ -214,24 +201,23 @@
             <div class="comment-form-area">
                 <h3><i class="fas fa-pen-alt"></i> Добавить прогноз</h3>
                 
-                <form action="https://submit-form.com/Okd3hiCZU" method="POST">
+                <form id="predictionForm">
                     <div class="form-group">
                         <label><i class="fas fa-user"></i> Ваше имя</label>
-                        <input type="text" name="name" placeholder="Например: Алексей" required>
+                        <input type="text" id="name" placeholder="Например: Алексей" required>
                     </div>
-                    
                     <div class="form-group">
                         <label><i class="fas fa-envelope"></i> Ваш email (не будет опубликован)</label>
-                        <input type="email" name="email" placeholder="example@mail.ru" required>
+                        <input type="email" id="email" placeholder="example@mail.ru" required>
                     </div>
-                    
                     <div class="form-group">
                         <label><i class="fas fa-comment"></i> Прогноз или инсайд</label>
-                        <textarea name="message" rows="4" placeholder="Напишите матч, исход, кэф или другую информацию..." required></textarea>
+                        <textarea id="message" rows="4" placeholder="Напишите матч, исход, кэф или другую информацию..." required></textarea>
                     </div>
-                    
-                    <button type="submit"><i class="fab fa-telegram-plane"></i> Отправить на проверку</button>
+                    <button type="submit" id="submitBtn"><i class="fab fa-telegram-plane"></i> Отправить на проверку</button>
                 </form>
+                
+                <div id="formStatus"></div>
                 
                 <p style="font-size: 0.7rem; margin-top: 15px; color: #5a6e4a;">
                     <i class="fas fa-check-circle"></i> Все сообщения приходят администратору. После проверки лучшие прогнозы появляются на сайте.
@@ -244,6 +230,48 @@
         <p>FreeDogMatch — только проверенная информация. Будьте осторожны и не доверяйте мошенникам.</p>
     </footer>
 </div>
+
+<script>
+    const form = document.getElementById('predictionForm');
+    const statusDiv = document.getElementById('formStatus');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+        
+        if (!name || !email || !message) {
+            statusDiv.innerHTML = '<div class="form-status form-status-error">❌ Заполните все поля!</div>';
+            return;
+        }
+        
+        statusDiv.innerHTML = '<div class="form-status" style="background:#1a2e1a; color:#b5ff8f;">⏳ Отправка...</div>';
+        submitBtn.disabled = true;
+        
+        try {
+            const response = await fetch('https://formbold.com/s/9aX0y', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, message })
+            });
+            
+            if (response.ok) {
+                statusDiv.innerHTML = '<div class="form-status form-status-success">✅ Прогноз отправлен! Администратор проверит и опубликует.</div>';
+                form.reset();
+            } else {
+                throw new Error('Ошибка');
+            }
+        } catch (error) {
+            statusDiv.innerHTML = '<div class="form-status form-status-error">❌ Ошибка. Попробуйте позже или напишите в Telegram.</div>';
+        } finally {
+            submitBtn.disabled = false;
+            setTimeout(() => { if (statusDiv.innerHTML) statusDiv.innerHTML = ''; }, 5000);
+        }
+    });
+</script>
 
 </body>
 </html>
