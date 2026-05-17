@@ -99,16 +99,18 @@
 
 <script>
     // ДАННЫЕ КОММЕНТАРИЕВ (добавляйте сюда вручную)
-    let commentsData = [
-        // Пример комментария с изображением:
-        // {
-        //     id: 1,
-        //     author: "Алексей",
-        //     text: "Скриншот ставки",
-        //     date: "17.05.2026",
-        //     image: "https://i.postimg.cc/example.jpg",
-        //     replies: []
-        // }
+     let commentsData = [
+        {
+            id: 1,
+            author: "скарфейс",
+            text: "ТС работагам\nУнион Кокле — УМЕЦИТ\n1:1",
+            date: "06.05.2026 17:49",
+            image: "",
+            replies: [
+                { author: "Вито", text: "ахуеть мужик спасибо", date: "07.05.2026 02:10" },
+                { author: "Сергей", text: "кф 10 в лайве, +++", date: "07.05.2026 02:14" }
+            ]
+        }
     ];
     
     function renderComments() {
