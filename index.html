@@ -153,15 +153,6 @@
             color: white;
             transform: translateY(-1px);
         }
-        .form-message {
-            margin-top: 18px;
-            font-size: 0.85rem;
-            padding: 10px 16px;
-            border-radius: 60px;
-            display: inline-block;
-        }
-        .success { background: #1a2e1a; color: #b5ff8f; border-left: 3px solid #9bff6e; }
-        .error { background: #2e1a1a; color: #ff9e8f; border-left: 3px solid #ff6e6e; }
         footer {
             text-align: center;
             padding: 1.8rem;
@@ -183,7 +174,6 @@
             <h1>FreeDogMatch</h1>
             <p>Проверенные прогнозы | Инсайды</p>
         </div>
-        <!-- ⚠️ ЗАМЕНИТЕ НА СВОЙ TELEGRAM (без @) -->
         <div class="telegram-contact">
             <a href="https://t.me/rekvz" target="_blank">
                 <i class="fab fa-telegram-plane"></i> 
@@ -201,43 +191,40 @@
 
         <div class="comments-section">
             <h2><i class="fas fa-comment-dots"></i> Комментарии</h2>
-            <div class="comments-list" id="commentsList">
+            <div class="comments-list">
                 <p><i class="fas fa-inbox"></i><br>Пока нет комментариев. Будьте первым, кто поделится прогнозом!</p>
             </div>
 
-            <!-- НАЧАЛО ФОРМЫ -->
-<div class="comment-form-area">
-    <h3><i class="fas fa-pen-alt"></i> Добавить прогноз</h3>
-    
-    <!-- ВАЖНО: ВСЯ МАГИЯ В ЭТОМ ТЕГЕ FORM -->
-    <form action="https://formsubmit.co/freedogmatch@gmail.com" method="POST">
-        
-        <!-- Защита от спама (скрытое поле) -->
-        <input type="text" name="_gotcha" style="display:none">
-        
-        <div class="form-group">
-            <label><i class="fas fa-user"></i> Ваше имя</label>
-            <input type="text" name="name" placeholder="Например: Алексей" required>
+            <div class="comment-form-area">
+                <h3><i class="fas fa-pen-alt"></i> Добавить прогноз</h3>
+                
+                <form action="https://formsubmit.co/freedogmatch@gmail.com" method="POST">
+                    <input type="text" name="_gotcha" style="display:none">
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Ваше имя</label>
+                        <input type="text" name="name" placeholder="Например: Алексей" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Ваш email (не будет опубликован)</label>
+                        <input type="email" name="email" placeholder="example@mail.ru" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-comment"></i> Прогноз или инсайд</label>
+                        <textarea name="message" rows="4" placeholder="Напишите матч, исход, кэф или другую информацию..." required></textarea>
+                    </div>
+                    
+                    <button type="submit"><i class="fab fa-telegram-plane"></i> Отправить на проверку</button>
+                </form>
+                
+                <p style="font-size: 0.7rem; margin-top: 15px; color: #5a6e4a;">
+                    <i class="fas fa-check-circle"></i> Все сообщения приходят администратору. После проверки лучшие прогнозы появляются на сайте.
+                </p>
+            </div>
         </div>
-        
-        <div class="form-group">
-            <label><i class="fas fa-envelope"></i> Ваш email (не будет опубликован)</label>
-            <input type="email" name="email" placeholder="example@mail.ru" required>
-        </div>
-        
-        <div class="form-group">
-            <label><i class="fas fa-comment"></i> Прогноз или инсайд</label>
-            <textarea name="message" rows="4" placeholder="Напишите матч, исход, кэф или другую информацию..." required></textarea>
-        </div>
-        
-        <button type="submit"><i class="fab fa-telegram-plane"></i> Отправить на проверку</button>
-    </form>
-    
-    <p style="font-size: 0.7rem; margin-top: 15px; color: #5a6e4a;">
-    <i class="fas fa-check-circle"></i> Все сообщения приходят администратору. После проверки лучшие прогнозы появляются на сайте.
-</p>
-</div>
-<!-- КОНЕЦ ФОРМЫ -->
+    </div>
 
     <footer>
         <p>FreeDogMatch — только проверенная информация. Будьте осторожны и не доверяйте мошенникам.</p>
