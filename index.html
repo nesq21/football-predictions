@@ -101,69 +101,83 @@
     // ДАННЫЕ КОММЕНТАРИЕВ (добавляйте сюда вручную)
      let commentsData = [
     {
-        id: 1,
-        author: "скарфейс",
-        text: "ТС работягам\nУнион Кокле — УМЕЦИТ\n1:1",
-        date: "06.05.2026 17:49",
-        image: "",
-        replies: [
-            { author: "Вито", text: "ахуеть мужик спасибо", date: "07.05.2026 02:10" },
-            { author: "Сергей", text: "кф 10 в лайве, где брал?", date: "07.05.2026 02:14" },
-            { 
-                author: "скарфейс", 
-                text: 'брал тут <a href="https://t.me/+Q3WeNX2Q5X1iN2My" target="_blank" style="color:#9bff6e;">https://t.me/+Q3WeNX2Q5X1iN2My</a>', 
-                date: "07.05.2026 14:38" 
-            }
-        ]
-    }
-];
+        {
+    id: 1,
+    author: "скарфейс",
+    text: "ТС работягам\nУнион Кокле — УМЕЦИТ\n1:1",
+    date: "06.05.2026 17:49",
+    image: "",
+    replies: [
+        { author: "Вито", text: "ахуеть мужик спасибо", date: "07.05.2026 02:10" },
+        { author: "Сергей", text: "кф 10 в лайве, где брал?", date: "07.05.2026 02:14" },
+        { 
+            author: "скарфейс", 
+            text: 'брал тут <a href="https://t.me/+Q3WeNX2Q5X1iN2My" target="_blank" style="color:#9bff6e;">https://t.me/+Q3WeNX2Q5X1iN2My</a>', 
+            date: "07.05.2026 14:38" 
+        }
+    ]
+}
     
     function renderComments() {
-        const container = document.getElementById('commentsList');
-        if (!commentsData.length) {
-            container.innerHTML = '<p><i class="fas fa-inbox"></i><br>Пока нет комментариев. Будьте первым!</p>';
-            return;
+    const container = document.getElementById('commentsList');
+    if (!commentsData.length) {
+        container.innerHTML = '<p><i class="fas fa-inbox"></i><br>Пока нет комментариев. Будьте первым!</p>';
+        return;
+    }
+    
+    let html = '';
+    for (let c of commentsData) {
+        // Для основного текста: если есть HTML-теги, не экранируем
+        let displayText = c.text;
+        if (c.text.indexOf('<a') === -1) {
+            displayText = escapeHtml(c.text);
         }
+        displayText = displayText.replace(/\n/g, '<br>');
         
-        let html = '';
-        for (let c of commentsData) {
-            html += `
-                <div class="comment" data-comment-id="${c.id}">
-                    <div class="comment-author">
-                        <i class="fas fa-user-circle"></i> ${escapeHtml(c.author)}
-                        <span class="comment-date">${c.date || new Date().toLocaleDateString()}</span>
-                    </div>
-                    <div class="comment-text">${escapeHtml(c.text)}</div>
-            `;
-            if (c.image) {
-                html += `<img class="comment-image" src="${escapeHtml(c.image)}" alt="Изображение" onerror="this.style.display='none'">`;
-            }
-            html += `
-                    <button class="reply-btn" onclick="showReplyForm(${c.id})"><i class="fas fa-reply"></i> Ответить</button>
-                    <div id="reply-form-${c.id}" class="reply-form">
-                        <input type="text" id="reply-name-${c.id}" placeholder="Ваше имя">
-                        <input type="email" id="reply-email-${c.id}" placeholder="Ваш email">
-                        <textarea id="reply-text-${c.id}" rows="2" placeholder="Ваш ответ..."></textarea>
-                        <button onclick="submitReply(${c.id})">Отправить ответ</button>
-                    </div>
-            `;
-            if (c.replies && c.replies.length) {
-                html += `<div class="replies">`;
-                for (let r of c.replies) {
-                    html += `
-                        <div class="comment" style="margin-bottom: 12px;">
-                            <div class="comment-author"><i class="fas fa-user-circle"></i> ${escapeHtml(r.author)}</div>
-                            <div class="comment-text">${escapeHtml(r.text)}</div>
-                            <div class="comment-date" style="font-size: 0.7rem;">${r.date || new Date().toLocaleDateString()}</div>
-                        </div>
-                    `;
+        html += `
+            <div class="comment" data-comment-id="${c.id}">
+                <div class="comment-author">
+                    <i class="fas fa-user-circle"></i> ${escapeHtml(c.author)}
+                    <span class="comment-date">${c.date || new Date().toLocaleDateString()}</span>
+                </div>
+                <div class="comment-text">${displayText}</div>
+        `;
+        if (c.image) {
+            html += `<img class="comment-image" src="${escapeHtml(c.image)}" alt="Изображение" onerror="this.style.display='none'">`;
+        }
+        html += `
+                <button class="reply-btn" onclick="showReplyForm(${c.id})"><i class="fas fa-reply"></i> Ответить</button>
+                <div id="reply-form-${c.id}" class="reply-form">
+                    <input type="text" id="reply-name-${c.id}" placeholder="Ваше имя">
+                    <input type="email" id="reply-email-${c.id}" placeholder="Ваш email">
+                    <textarea id="reply-text-${c.id}" rows="2" placeholder="Ваш ответ..."></textarea>
+                    <button onclick="submitReply(${c.id})">Отправить ответ</button>
+                </div>
+        `;
+        if (c.replies && c.replies.length) {
+            html += `<div class="replies">`;
+            for (let r of c.replies) {
+                // Для ответов: если есть HTML-теги, не экранируем
+                let replyText = r.text;
+                if (replyText.indexOf('<a') === -1) {
+                    replyText = escapeHtml(replyText);
                 }
-                html += `</div>`;
+                replyText = replyText.replace(/\n/g, '<br>');
+                
+                html += `
+                    <div class="comment" style="margin-bottom: 12px;">
+                        <div class="comment-author"><i class="fas fa-user-circle"></i> ${escapeHtml(r.author)}</div>
+                        <div class="comment-text">${replyText}</div>
+                        <div class="comment-date" style="font-size: 0.7rem;">${r.date || new Date().toLocaleDateString()}</div>
+                    </div>
+                `;
             }
             html += `</div>`;
         }
-        container.innerHTML = html;
+        html += `</div>`;
     }
+    container.innerHTML = html;
+}
     
     function escapeHtml(str) {
         if (!str) return '';
