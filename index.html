@@ -12,22 +12,22 @@
         .header { background: #080b10; padding: 1.2rem 2rem; border-bottom: 1px solid #262a33; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; }
         .logo h1 { font-size: 1.6rem; background: linear-gradient(135deg, #ffffff, #b5ff8f); background-clip: text; -webkit-background-clip: text; color: transparent; }
         .logo p { font-size: 0.8rem; color: #8892b0; }
-        .telegram-contact { background: #1e2a1a; padding: 8px 18px; border-radius: 60px; border: 1px solid #3b4c33; }
+        .telegram-contact { background: #1e2a1a; padding: 8px 18px; border-radius: 60px; border: 1px solid #3b4c33; transition: all 0.2s ease; }
         .telegram-contact a { color: #b5ff8f; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .telegram-contact:hover { background: #2b3a24; border-color: #9bff6e; transform: scale(1.02); }
         .main-content { padding: 2rem; }
         .intro-text { background: #11161f; border-left: 5px solid #9bff6e; padding: 1.2rem 1.5rem; border-radius: 24px; margin-bottom: 2rem; }
+        .comments-section h2 { font-size: 1.7rem; margin: 1.8rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px dashed #2a2f3c; color: #d6f5c0; }
         .comments-list { margin-top: 25px; min-height: 120px; background: #0b0e14; border-radius: 24px; padding: 2rem; text-align: center; color: #6f7a98; border: 1px dashed #2a2f3c; }
         .comment-form-area { margin-top: 48px; background: #0e1118; border-radius: 28px; padding: 1.8rem; border: 1px solid #272e3a; }
         .comment-form-area h3 { color: #c0f0a0; margin-bottom: 1rem; }
         .form-group { margin-bottom: 1.2rem; }
         label { display: block; margin-bottom: 6px; font-size: 0.85rem; color: #a6b3cf; }
         input, textarea { width: 100%; background: #03060b; border: 1px solid #2b303d; padding: 12px 16px; border-radius: 20px; color: #f0f3fa; font-family: inherit; }
-        button { background: #1f3320; border: none; padding: 12px 28px; border-radius: 40px; color: #ebffe0; cursor: pointer; border: 1px solid #47633b; display: inline-flex; align-items: center; gap: 12px; }
-        button:hover { background: #2d4a27; border-color: #9bff6e; }
+        input:focus, textarea:focus { outline: none; border-color: #9bff6e; box-shadow: 0 0 0 3px rgba(155, 255, 110, 0.2); }
+        button { background: #1f3320; border: none; padding: 12px 28px; border-radius: 40px; color: #ebffe0; cursor: pointer; border: 1px solid #47633b; display: inline-flex; align-items: center; gap: 12px; font-weight: bold; }
+        button:hover { background: #2d4a27; border-color: #9bff6e; transform: translateY(-1px); }
         footer { text-align: center; padding: 1.8rem; border-top: 1px solid #1a1e28; color: #5f6a84; font-size: 0.75rem; }
-        .form-status { margin-top: 15px; padding: 12px; border-radius: 12px; text-align: center; }
-        .form-status-success { background: #1a2e1a; color: #b5ff8f; }
-        .form-status-error { background: #2e1a1a; color: #ff9e8f; }
         @media (max-width: 640px) { .main-content { padding: 1.3rem; } .header { flex-direction: column; text-align: center; } }
     </style>
 </head>
@@ -40,71 +40,39 @@
     <div class="main-content">
         <div class="intro-text">
             <p><strong>Раздел бесплатных договорных матчей</strong> — вы можете бесплатно поделиться инсайдерской информацией или договорным матчем.<br>
-            ⚠️ Помните: в этой сфере огромный наплыв мошенников. Думайте своей головой.<br>
+            ⚠️ Помните: в этой сфере сейчас огромный наплыв мошенников. Думайте своей головой.<br>
             ✅ Размещайте прогнозы и ставки для общего доступа.</p>
         </div>
         <div class="comments-section">
             <h2><i class="fas fa-comment-dots"></i> Комментарии</h2>
-            <div class="comments-list"><p><i class="fas fa-inbox"></i><br>Пока нет комментариев. Будьте первым!</p></div>
+            <div class="comments-list"><p><i class="fas fa-inbox"></i><br>Пока нет комментариев. Будьте первым, кто поделится прогнозом!</p></div>
             <div class="comment-form-area">
                 <h3><i class="fas fa-pen-alt"></i> Добавить прогноз</h3>
-                <form id="predictionForm">
-                    <div class="form-group"><label>Ваше имя</label><input type="text" id="name" placeholder="Например: Алексей" required></div>
-                    <div class="form-group"><label>Ваш email (не будет опубликован)</label><input type="email" id="email" placeholder="example@mail.ru" required></div>
-                    <div class="form-group"><label>Прогноз или инсайд</label><textarea id="message" rows="4" placeholder="Напишите матч, исход, кэф..." required></textarea></div>
-                    <button type="submit" id="submitBtn"><i class="fab fa-telegram-plane"></i> Отправить на проверку</button>
+                
+                <!-- ПРОСТАЯ HTML-ФОРМА, КОТОРАЯ ТОЧНО РАБОТАЕТ -->
+                <form action="https://submit-form.com/9dwfhMonW" method="POST">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Ваше имя</label>
+                        <input type="text" name="name" placeholder="Например: Алексей" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Ваш email (не будет опубликован)</label>
+                        <input type="email" name="email" placeholder="example@mail.ru" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-comment"></i> Прогноз или инсайд</label>
+                        <textarea name="message" rows="4" placeholder="Напишите матч, исход, кэф или другую информацию..." required></textarea>
+                    </div>
+                    <button type="submit"><i class="fab fa-telegram-plane"></i> Отправить на проверку</button>
                 </form>
-                <div id="formStatus"></div>
-                <p style="font-size: 0.7rem; margin-top: 15px; color: #5a6e4a;"><i class="fas fa-check-circle"></i> Все сообщения приходят администратору.</p>
+                
+                <p style="font-size: 0.7rem; margin-top: 15px; color: #5a6e4a;">
+                    <i class="fas fa-check-circle"></i> Все сообщения приходят администратору. После проверки лучшие прогнозы появляются на сайте.
+                </p>
             </div>
         </div>
     </div>
-    <footer><p>FreeDogMatch — только проверенная информация.</p></footer>
+    <footer><p>FreeDogMatch — только проверенная информация. Будьте осторожны и не доверяйте мошенникам.</p></footer>
 </div>
-<script>
-    const form = document.getElementById('predictionForm');
-    const statusDiv = document.getElementById('formStatus');
-    const submitBtn = document.getElementById('submitBtn');
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const message = document.getElementById('message').value.trim();
-        
-        if (!name || !email || !message) {
-            statusDiv.innerHTML = '<div class="form-status form-status-error">❌ Заполните все поля!</div>';
-            return;
-        }
-        
-        statusDiv.innerHTML = '<div class="form-status">⏳ Отправка...</div>';
-        submitBtn.disabled = true;
-        
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('message', message);
-        
-        try {
-            const response = await fetch('https://submit-form.com/9dwfhMonW', {
-                method: 'POST',
-                body: formData
-            });
-            
-            if (response.ok) {
-                statusDiv.innerHTML = '<div class="form-status form-status-success">✅ Прогноз отправлен! Администратор проверит.</div>';
-                form.reset();
-            } else {
-                throw new Error('Ошибка');
-            }
-        } catch (error) {
-            statusDiv.innerHTML = '<div class="form-status form-status-error">❌ Ошибка. Попробуйте позже или напишите в Telegram.</div>';
-        } finally {
-            submitBtn.disabled = false;
-            setTimeout(() => { if (statusDiv.innerHTML) statusDiv.innerHTML = ''; }, 5000);
-        }
-    });
-</script>
 </body>
 </html>
