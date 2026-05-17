@@ -102,38 +102,38 @@
      let commentsData = [
     {
         id: 1,
-        author: "скарфейс",
-        text: "ТС работягам\nУнион Кокле — УМЕЦИТ\n1:1",
-        date: "06.05.2026 17:49",
-        image: "",
-        replies: [
-            { author: "Вито", text: "ахуеть мужик спасибо", date: "07.05.2026 02:10" },
-            { author: "Сергей", text: "кф 10 в лайве, где брал?", date: "07.05.2026 02:14" },
-            { 
-                author: "скарфейс", 
-                text: 'брал тут <a href="https://t.me/+Q3WeNX2Q5X1iN2My" target="_blank" style="color:#9bff6e;">https://t.me/+Q3WeNX2Q5X1iN2My</a>', 
-                date: "07.05.2026 14:38" 
-            }
-        ]
-    }
-];
-{   // ← запятая выше и новый объект
-        id: 2,
-        author: "Банкир",
-        text: "Взял матч в пещере\nЭкскурсионистас — УАИ Уркиса\nисход - ничья",
-        date: "09.05.2026 00:24",
-        image: "",
-        replies: [
-            { author: "Сергей", text: "что за пещера?", date: "09.05.2026 01:37" },
-            { author: "Дуан", text: "+++", date: "09.05.2026 11:54" },
-            { 
-                author: "Red", 
-                text: '3.3кф от души', 
-                date: "09.05.2026 12:10" 
-            }
-        ]
-    }
-];
+            author: "Банкир",
+            text: "Взял матч в пещере\nЭкскурсионистас — УАИ Уркиса\nисход - ничья",
+            date: "09.05.2026 00:24",
+            image: "",
+            replies: [
+                { author: "Сергей", text: "что за пещера?", date: "09.05.2026 01:37" },
+                { author: "Дуан", text: "+++", date: "09.05.2026 11:54" },
+                { 
+                    author: "Red", 
+                    text: '3.3кф от души', 
+                    date: "09.05.2026 12:10" 
+                }
+            ]
+        },
+        {
+            id: 2,
+            author: "скарфейс",
+            text: "ТС работягам\nУнион Кокле — УМЕЦИТ\n1:1",
+            date: "06.05.2026 17:49",
+            image: "",
+            replies: [
+                { author: "Вито", text: "ахуеть мужик спасибо", date: "07.05.2026 02:10" },
+                { author: "Сергей", text: "кф 10 в лайве, где брал?", date: "07.05.2026 02:14" },
+                { 
+                    author: "скарфейс", 
+                    text: 'брал тут <a href="https://t.me/+Q3WeNX2Q5X1iN2My" target="_blank" style="color:#9bff6e;">https://t.me/+Q3WeNX2Q5X1iN2My</a>', 
+                    date: "07.05.2026 14:38" 
+                }
+            ]
+        }
+    ];
+    
     function renderComments() {
     const container = document.getElementById('commentsList');
     if (!commentsData.length) {
