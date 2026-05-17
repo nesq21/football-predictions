@@ -205,102 +205,45 @@
                 <p><i class="fas fa-inbox"></i><br>Пока нет комментариев. Будьте первым, кто поделится прогнозом!</p>
             </div>
 
-            <div class="comment-form-area">
-                <h3><i class="fas fa-pen-alt"></i> Добавить прогноз</h3>
-                <form id="commentForm">
-                    <div class="form-group">
-                        <label><i class="fas fa-user"></i> Ваше имя</label>
-                        <input type="text" id="userName" placeholder="Например: Алексей" required>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-envelope"></i> Ваш email (не будет опубликован)</label>
-                        <input type="email" id="userEmail" placeholder="example@mail.ru" required>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-comment"></i> Прогноз или инсайд</label>
-                        <textarea id="userComment" rows="4" placeholder="Напишите матч, исход, кэф или другую информацию..." required></textarea>
-                    </div>
-                    <button type="submit"><i class="fab fa-telegram-plane"></i> Отправить на проверку</button>
-                    <div id="formStatus" class="form-message"></div>
-                </form>
-                <p style="font-size: 0.7rem; margin-top: 15px; color: #5a6e4a;"><i class="fas fa-shield-alt"></i> Все сообщения приходят модератору. После проверки лучшие прогнозы появятся здесь.</p>
-            </div>
+            <!-- НАЧАЛО ФОРМЫ -->
+<div class="comment-form-area">
+    <h3><i class="fas fa-pen-alt"></i> Добавить прогноз</h3>
+    
+    <!-- ВАЖНО: ВСЯ МАГИЯ В ЭТОМ ТЕГЕ FORM -->
+    <form action="https://formsubmit.cloud/f/3a09dbf3-369b-48a3-bcc5-ecde443f85ed/" method="POST">
+        
+        <!-- Защита от спама (скрытое поле) -->
+        <input type="text" name="_gotcha" style="display:none">
+        
+        <div class="form-group">
+            <label><i class="fas fa-user"></i> Ваше имя</label>
+            <input type="text" name="name" placeholder="Например: Алексей" required>
         </div>
-    </div>
+        
+        <div class="form-group">
+            <label><i class="fas fa-envelope"></i> Ваш email (не будет опубликован)</label>
+            <input type="email" name="email" placeholder="example@mail.ru" required>
+        </div>
+        
+        <div class="form-group">
+            <label><i class="fas fa-comment"></i> Прогноз или инсайд</label>
+            <textarea name="message" rows="4" placeholder="Напишите матч, исход, кэф или другую информацию..." required></textarea>
+        </div>
+        
+        <button type="submit"><i class="fab fa-telegram-plane"></i> Отправить на проверку</button>
+    </form>
+    
+    <p style="font-size: 0.7rem; margin-top: 15px; color: #5a6e4a;">
+        <i class="fas fa-shield-alt"></i> После нажатия кнопки нужно пройти простую проверку (капчу). 
+        Это защищает сайт от спама. Спасибо за понимание!
+    </p>
+</div>
+<!-- КОНЕЦ ФОРМЫ -->
 
     <footer>
         <p>FreeDogMatch — только проверенная информация. Будьте осторожны и не доверяйте мошенникам.</p>
     </footer>
 </div>
-
-<script>
-    // ВАЖНО: ЗАМЕНИТЕ ЭТОТ URL НА ВАШ ИЗ LICHNOGO KABINETA FORMSubmit.cloud
-    const FORM_ENDPOINT = "https://formsubmit.cloud/f/3a09dbf3-369b-48a3-bcc5-ecde443f85ed/";  // <--- СЮДА ВСТАВЬТЕ СКОПИРОВАННЫЙ URL
-    
-    const form = document.getElementById('commentForm');
-    const statusDiv = document.getElementById('formStatus');
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const name = document.getElementById('userName').value.trim();
-        const email = document.getElementById('userEmail').value.trim();
-        const comment = document.getElementById('userComment').value.trim();
-        
-        if (!name || !email || !comment) {
-            statusDiv.textContent = '❌ Заполните все поля';
-            statusDiv.className = 'form-message error';
-            return;
-        }
-        
-        const submitBtn = form.querySelector('button');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Отправка...';
-        submitBtn.disabled = true;
-        
-        try {
-            const response = await fetch(FORM_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: name,
-                    email: email,
-                    message: comment,
-                    _subject: `Новый прогноз на FreeDogMatch от ${name}`
-                })
-            });
-            
-            if (response.ok) {
-                statusDiv.textContent = '✅ Прогноз отправлен на проверку! После модерации он появится на сайте. Спасибо!';
-                statusDiv.className = 'form-message success';
-                form.reset();
-            } else {
-                throw new Error('Ошибка отправки');
-            }
-        } catch (error) {
-            console.error(error);
-            statusDiv.textContent = '❌ Ошибка при отправке. Попробуйте позже или напишите в Telegram.';
-            statusDiv.className = 'form-message error';
-        } finally {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-            
-            setTimeout(() => {
-                if (statusDiv) {
-                    statusDiv.style.opacity = '0';
-                    setTimeout(() => {
-                        statusDiv.textContent = '';
-                        statusDiv.className = 'form-message';
-                        statusDiv.style.opacity = '1';
-                    }, 300);
-                }
-            }, 5000);
-        }
-    });
-</script>
 
 </body>
 </html>
