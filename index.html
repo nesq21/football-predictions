@@ -276,36 +276,54 @@
         form.style.display = form.style.display === 'none' || !form.style.display ? 'block' : 'none';
     }
     
-    async function submitReply(commentId) {
-        const name = document.getElementById(`reply-name-${commentId}`).value.trim();
-        const email = document.getElementById(`reply-email-${commentId}`).value.trim();
-        const text = document.getElementById(`reply-text-${commentId}`).value.trim();
-        
-        if (!name || !email || !text) {
-            alert('Заполните все поля для ответа');
-            return;
-        }
-        
-        try {
-            const response = await fetch('https://getform.io/f/bjjyjzxa', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, message: `Ответ на комментарий #${commentId}: ${text}` })
-            });
-            if (response.ok) {
-                alert('Ответ отправлен! После проверки администратор опубликует его.');
-                document.getElementById(`reply-name-${commentId}`).value = '';
-                document.getElementById(`reply-email-${commentId}`).value = '';
-                document.getElementById(`reply-text-${commentId}`).value = '';
-                document.getElementById(`reply-form-${commentId}`).style.display = 'none';
-            } else {
-                alert('Ошибка отправки. Попробуйте позже.');
-            }
-        } catch (err) {
-            alert('Ошибка. Напишите в Telegram.');
-        }
+    function submitReply(commentId) {
+    const name = document.getElementById(`reply-name-${commentId}`).value.trim();
+    const email = document.getElementById(`reply-email-${commentId}`).value.trim();
+    const text = document.getElementById(`reply-text-${commentId}`).value.trim();
+
+    if (!name || !email || !text) {
+        alert('Заполните все поля для ответа');
+        return;
     }
+
+    // Создаём временную скрытую форму
+    const tempForm = document.createElement('form');
+    tempForm.method = 'POST';
+    tempForm.action = 'https://submit-form.com/9dwfhMonW';
+    tempForm.target = '_blank';
+
+    // Добавляем поля
+    const nameField = document.createElement('input');
+    nameField.type = 'hidden';
+    nameField.name = 'name';
+    nameField.value = name;
+    tempForm.appendChild(nameField);
+
+    const emailField = document.createElement('input');
+    emailField.type = 'hidden';
+    emailField.name = 'email';
+    emailField.value = email;
+    tempForm.appendChild(emailField);
+
+    const messageField = document.createElement('input');
+    messageField.type = 'hidden';
+    messageField.name = 'message';
+    messageField.value = `Ответ на комментарий #${commentId}:\n\n${text}`;
+    tempForm.appendChild(messageField);
+
+    // Отправляем форму
+    document.body.appendChild(tempForm);
+    tempForm.submit();
+    document.body.removeChild(tempForm);
+
+    // Очищаем поля
+    document.getElementById(`reply-name-${commentId}`).value = '';
+    document.getElementById(`reply-email-${commentId}`).value = '';
+    document.getElementById(`reply-text-${commentId}`).value = '';
+    document.getElementById(`reply-form-${commentId}`).style.display = 'none';
     
+    alert('Ответ отправлен! Администратор проверит и опубликует.');
+}
     renderComments();
 </script>
 </body>
